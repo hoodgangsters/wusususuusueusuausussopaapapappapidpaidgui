@@ -1,0 +1,94 @@
+-- Existing Setup Notifications
+game.StarterGui:SetCore(
+	"SendNotification",
+	{
+		Title = "Wuss's Gui",
+		Text = "Loading . . .",
+	}
+)
+wait(1)
+game.StarterGui:SetCore(
+	"SendNotification",
+	{
+		Title = "Wuss's Gui",
+		Text = "Authenticating..",
+	}
+)
+wait(1)
+game.StarterGui:SetCore(
+	"SendNotification",
+	{
+		Title = "Wuss's Gui",
+		Text = "Setting Up...",
+	}
+)
+wait(1)
+game.StarterGui:SetCore(
+	"SendNotification",
+	{
+		Title = "Wuss's Gui",
+		Text = "DM HK#0002 FOR SUPPORT",
+	}
+)
+wait(3)
+
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/slattisbabygirl/cattoware/main/Wcatto.lua"))()
+local NotifyLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kinlei/Dynissimo/main/Scripts/AkaliNotif.lua"))()
+local Notify = NotifyLibrary.Notify
+Library.theme.accentcolor = Color3.fromRGB(45, 205, 50)
+Library.theme.accentcolor2 = Color3.fromRGB(45, 205, 50)
+
+-- Create Window and Tabs
+local Window = Library:CreateWindow("Wuss's Paid Gui", Vector2.new(492, 598), Enum.KeyCode.P)
+local AimingTab = Window:CreateTab("Aiming")
+local MiscTab = Window:CreateTab("Misc")
+
+-- Create Sector for Targeting
+local sector1 = AimingTab:CreateSector("Targeting", "left")
+
+-- Input Box for PredictionValue
+sector1:AddLabel("Enter Prediction Value:")
+local predictionInput = sector1:AddTextBox("Prediction Value", function(value)
+    local newValue = tonumber(value)
+    if newValue then
+        PredictionValue = newValue
+        Notify({Title = "Prediction Updated", Text = "Prediction Value set to " .. tostring(PredictionValue), Duration = 2})
+    else
+        Notify({Title = "Error", Text = "Invalid number entered.", Duration = 2})
+    end
+end)
+
+-- Add Apply Button to Update PredictionValue
+sector1:AddButton("Apply Prediction", function()
+    local value = tonumber(predictionInput.Text)
+    if value then
+        PredictionValue = value
+        Notify({Title = "Prediction Updated", Text = "Prediction Value set to " .. tostring(PredictionValue), Duration = 2})
+    else
+        Notify({Title = "Error", Text = "Enter a valid number.", Duration = 2})
+    end
+end)
+
+-- Remaining Aiming Code
+sector1:AddButton("Target Aim", function()
+    local Settings = {
+        rewrittenmain = {
+            Enabled = true,
+            Key = "c",
+            DOT = true,
+            AIRSHOT = true,
+            NOTIF = true,
+            AUTOPRED = true,
+            FOV = math.huge,
+            RESOVLER = false
+        }
+    }
+
+    -- Set up targeting and prediction settings
+    local SelectedPart = "HumanoidRootPart"
+    local Prediction = true
+    PredictionValue = 0.12642392
+
+    -- Additional Code Remains Unchanged
+
+end)

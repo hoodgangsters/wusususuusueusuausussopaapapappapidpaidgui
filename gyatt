@@ -1,0 +1,129 @@
+-- YUFI PRIV8 - Advanced Aiming GUI
+-- Notifications on load
+game.StarterGui:SetCore("SendNotification", {
+    Title = "YUFI PRIV8",
+    Text = "Loading GUI...",
+})
+wait(1)
+game.StarterGui:SetCore("SendNotification", {
+    Title = "YUFI PRIV8",
+    Text = "Authenticating...",
+})
+wait(1)
+game.StarterGui:SetCore("SendNotification", {
+    Title = "YUFI PRIV8",
+    Text = "Setting Up...",
+})
+wait(1)
+game.StarterGui:SetCore("SendNotification", {
+    Title = "YUFI PRIV8",
+    Text = "Auto Camlock Enabled",
+})
+wait(3)
+
+-- Load GUI libraries
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/slattisbabygirl/cattoware/main/Wcatto.lua"))()
+local NotifyLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kinlei/Dynissimo/main/Scripts/AkaliNotif.lua"))()
+local Notify = NotifyLibrary.Notify
+Library.theme.accentcolor = Color3.fromRGB(70, 130, 180)  -- Cool Sky Blue Theme
+Library.theme.accentcolor2 = Color3.fromRGB(70, 130, 180)
+
+-- Create Main Window and Tabs
+local Window = Library:CreateWindow("YUFI PRIV8", Vector2.new(492, 598), Enum.KeyCode.P)
+local AimingTab = Window:CreateTab("Aiming")
+local CamlockTab = Window:CreateTab("Camlock")
+
+-- Aiming Tab Setup
+local sector1 = AimingTab:CreateSector("Targeting Settings", "left")
+
+-- Add Prediction Value input box for Aiming
+sector1:AddLabel("Enter Prediction Value:")
+local predictionInput = sector1:AddTextBox("Prediction Value", function(value)
+    local newValue = tonumber(value)
+    if newValue then
+        PredictionValue = newValue
+        Notify({
+            Title = "Prediction Updated",
+            Text = "Prediction Value set to " .. tostring(PredictionValue),
+            Duration = 2
+        })
+    else
+        Notify({
+            Title = "Error",
+            Text = "Invalid number entered.",
+            Duration = 2
+        })
+    end
+end)
+
+-- Camlock Tab (Auto-enabled by default)
+local camlockSector = CamlockTab:CreateSector("Camlock Settings", "left")
+
+-- Prediction input for Camlock
+camlockSector:AddLabel("Set Camlock Prediction Velocity:")
+local camlockPredictionInput = camlockSector:AddTextBox("Camlock Prediction", function(value)
+    local newValue = tonumber(value)
+    if newValue then
+        getgenv().PredictionVelocity = newValue
+        Notify({
+            Title = "Camlock Prediction Updated",
+            Text = "Prediction Velocity set to " .. tostring(getgenv().PredictionVelocity),
+            Duration = 2
+        })
+    else
+        Notify({
+            Title = "Error",
+            Text = "Invalid number entered.",
+            Duration = 2
+        })
+    end
+end)
+
+-- Auto-enable Camlock configuration
+getgenv().OldAimPart = "Head"
+getgenv().AimPart = "HumanoidRootPart"
+getgenv().AimlockKey = "q"
+getgenv().AimRadius = 100
+getgenv().ThirdPerson = true
+getgenv().FirstPerson = true
+getgenv().TeamCheck = false
+getgenv().PredictMovement = true
+getgenv().PredictionVelocity = 7.8  -- Default prediction value
+getgenv().CheckIfJumped = true
+getgenv().Smoothness = true
+getgenv().SmoothnessAmount = 0.5
+
+Notify({
+    Title = "Camlock Activated",
+    Text = "Camlock is auto-enabled on start!",
+    Duration = 3
+})
+
+-- Camlock Status Button to display current configuration
+camlockSector:AddButton("Show Camlock Status", function()
+    Notify({
+        Title = "Camlock Status",
+        Text = "Camlock is active with Prediction Velocity: " .. tostring(getgenv().PredictionVelocity),
+        Duration = 3
+    })
+end)
+
+-- Targeting Mechanics (using placeholder Target Aim function)
+sector1:AddButton("Target Aim", function()
+    local Settings = {
+        rewrittenmain = {
+            Enabled = true,
+            Key = "c",
+            DOT = true,
+            AIRSHOT = true,
+            NOTIF = true,
+            AUTOPRED = true,
+            FOV = math.huge,
+            RESOLVER = false
+        }
+    }
+
+    -- Additional targeting code here...
+    local SelectedPart = "HumanoidRootPart"
+    PredictionValue = 0.12642392  -- Initial value, dynamically updated by UI input
+end)

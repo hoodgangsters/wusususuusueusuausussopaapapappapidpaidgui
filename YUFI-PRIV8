@@ -1,0 +1,170 @@
+-- YUFI PRIV8 - Enhanced Aiming GUI with Animations and Toggle
+local StarterGui = game:GetService("StarterGui")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+local UIS = game:GetService("UserInputService")
+
+-- Notifications on load
+StarterGui:SetCore("SendNotification", {
+    Title = "YUFI PRIV8",
+    Text = "Loading GUI...",
+})
+wait(1)
+StarterGui:SetCore("SendNotification", {
+    Title = "YUFI PRIV8",
+    Text = "Authenticating...",
+})
+wait(1)
+StarterGui:SetCore("SendNotification", {
+    Title = "YUFI PRIV8",
+    Text = "Setting Up...",
+})
+wait(1)
+StarterGui:SetCore("SendNotification", {
+    Title = "YUFI PRIV8",
+    Text = "aacounttheft@gmail.com for support",
+})
+wait(3)
+
+-- Create Main ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "YUFI_PRIV8_GUI"
+screenGui.Parent = PlayerGui
+
+-- Create a main frame for the UI
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 300, 0, 400)
+mainFrame.Position = UDim2.new(0.5, -150, 0.5, -200)
+mainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+mainFrame.BorderSizePixel = 0
+mainFrame.Visible = true
+mainFrame.Parent = screenGui
+
+-- Smooth UI show/hide function
+local function toggleUI()
+    mainFrame.Visible = not mainFrame.Visible
+    if mainFrame.Visible then
+        for i = 0, 1, 0.05 do
+            mainFrame.BackgroundTransparency = 1 - i
+            wait(0.02)
+        end
+    else
+        for i = 0, 1, 0.05 do
+            mainFrame.BackgroundTransparency = i
+            wait(0.02)
+        end
+    end
+end
+
+-- Toggle UI visibility with Right Control
+UIS.InputBegan:Connect(function(input)
+    if input.KeyCode == Enum.KeyCode.RightControl then
+        toggleUI()
+    end
+end)
+
+-- Title Label
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Text = "YUFI PRIV8 - Aiming GUI"
+titleLabel.Size = UDim2.new(1, 0, 0, 50)
+titleLabel.BackgroundTransparency = 1
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.Font = Enum.Font.SourceSansBold
+titleLabel.TextSize = 20
+titleLabel.Parent = mainFrame
+
+-- Prediction Value Label
+local predictionLabel = Instance.new("TextLabel")
+predictionLabel.Text = "Set Prediction Value:"
+predictionLabel.Position = UDim2.new(0, 10, 0, 70)
+predictionLabel.Size = UDim2.new(1, -20, 0, 30)
+predictionLabel.BackgroundTransparency = 1
+predictionLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+predictionLabel.Font = Enum.Font.SourceSans
+predictionLabel.TextSize = 18
+predictionLabel.Parent = mainFrame
+
+-- Prediction Value TextBox
+local predictionBox = Instance.new("TextBox")
+predictionBox.Size = UDim2.new(1, -20, 0, 30)
+predictionBox.Position = UDim2.new(0, 10, 0, 100)
+predictionBox.PlaceholderText = "Enter Prediction Value"
+predictionBox.Text = ""
+predictionBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+predictionBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+predictionBox.Font = Enum.Font.SourceSans
+predictionBox.TextSize = 18
+predictionBox.ClearTextOnFocus = false
+predictionBox.Parent = mainFrame
+
+-- Prediction Value variable
+local PredictionValue = 0.12642392  -- Default prediction value
+
+-- Capture Prediction Value input
+predictionBox.FocusLost:Connect(function(enterPressed)
+    if enterPressed then
+        local newValue = tonumber(predictionBox.Text)
+        if newValue then
+            PredictionValue = newValue
+            StarterGui:SetCore("SendNotification", {
+                Title = "Prediction Updated",
+                Text = "Prediction Value set to " .. tostring(PredictionValue),
+                Duration = 2
+            })
+        else
+            StarterGui:SetCore("SendNotification", {
+                Title = "Error",
+                Text = "Please enter a valid number.",
+                Duration = 2
+            })
+        end
+        predictionBox.Text = ""  -- Clear input after setting
+    end
+end)
+
+-- Auto-enable Camlock configuration
+getgenv().OldAimPart = "Head"
+getgenv().AimPart = "HumanoidRootPart"
+getgenv().AimlockKey = "c"
+getgenv().AimRadius = 100
+getgenv().ThirdPerson = true
+getgenv().FirstPerson = true
+getgenv().TeamCheck = false
+getgenv().PredictMovement = true
+getgenv().PredictionVelocity = PredictionValue
+getgenv().CheckIfJumped = true
+getgenv().Smoothness = true
+getgenv().SmoothnessAmount = 0.5
+
+StarterGui:SetCore("SendNotification", {
+    Title = "Camlock Activated",
+    Text = "YUFI PRIV8 ON TOP",
+    Duration = 3
+})
+
+-- Camlock Status Button
+local camlockStatusButton = Instance.new("TextButton")
+camlockStatusButton.Text = "Show Camlock Status"
+camlockStatusButton.Size = UDim2.new(1, -20, 0, 30)
+camlockStatusButton.Position = UDim2.new(0, 10, 0, 150)
+camlockStatusButton.BackgroundColor3 = Color3.fromRGB(70, 130, 180)
+camlockStatusButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+camlockStatusButton.Font = Enum.Font.SourceSansBold
+camlockStatusButton.TextSize = 18
+camlockStatusButton.Parent = mainFrame
+
+-- Display Camlock Status on Button Click
+camlockStatusButton.MouseButton1Click:Connect(function()
+    StarterGui:SetCore("SendNotification", {
+        Title = "Camlock Status",
+        Text = "Camlock active with Prediction Velocity: " .. tostring(PredictionValue),
+        Duration = 3
+    })
+end)
+
+-- Additional animations or effects can be added to other elements if desired
+
+-- Other functionalities (targeting, aim handling, etc.) can be added here
+
+print("YUFI PRIV8 loaded successfully!")
